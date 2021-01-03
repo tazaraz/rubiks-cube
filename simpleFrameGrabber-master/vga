@@ -1,0 +1,2 @@
+#!/bin/sh
+./grab 640 480 yuv422 115200 /dev/cu.usbserial-A50285BI 1

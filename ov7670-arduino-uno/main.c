@@ -11,9 +11,9 @@
 /* Configuration: this lets you easily change between different resolutions
  * You must only uncomment one
  * no more no less*/
-// #define useVga
+#define useVga
 //#define useQvga
-#define useQqvga
+// #define useQqvga
 
 static inline void serialWrB(uint8_t dat){
 	while(!( UCSR0A & (1<<UDRE0)));//wait for byte to transmit

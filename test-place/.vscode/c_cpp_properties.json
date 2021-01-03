@@ -6,7 +6,10 @@
                 "${workspaceFolder}/**",
                 "/usr/local/Cellar/avr-gcc/9.3.0/avr/include"
             ],
-            "defines": [],
+            "defines": [
+                "F_CPU=16000000UL",
+                "__AVR_ATmega2560__"
+            ],
             "macFrameworkPath": [],
             "compilerPath": "/usr/local/bin/gcc-10",
             "cStandard": "gnu17",

@@ -85,7 +85,7 @@ PROJECTNAME=ov7670NoRam
 # (list all files to compile, e.g. 'a.c b.cpp as.S'):
 # Use .cc, .cpp or .C suffix for C++ files, use .S
 # (NOT .s !!!) for assembly source code files.
-PRJSRC=main.c
+PRJSRC=main.c ov7670.c
 
 # additional includes (e.g. -I/path/to/mydir)
 INC=
@@ -117,7 +117,7 @@ AVRDUDE_PROGRAMMERID=avrispv2
 # port--serial or parallel port to which your
 # hardware programmer is attached
 #
-AVRDUDE_PORT=/dev/tty.usbserial-A50285BI
+AVRDUDE_PORT=/dev/cu.usbserial-A50285BI
 
 
 ####################################################
