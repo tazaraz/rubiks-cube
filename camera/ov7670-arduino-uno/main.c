@@ -11,9 +11,9 @@
 /* Configuration: this lets you easily change between different resolutions
  * You must only uncomment one
  * no more no less*/
-#define useVga
+//#define useVga
 //#define useQvga
-// #define useQqvga
+#define useQqvga
 
 static inline void serialWrB(uint8_t dat){
 	while(!( UCSR0A & (1<<UDRE0)));//wait for byte to transmit
@@ -32,7 +32,6 @@ static void captureImg(uint16_t wg,uint16_t hg){
 #elif defined(useQqvga)
 	uint8_t buf[320];
 #endif
-	StringPgm(PSTR("RDY"));
 	//Wait for vsync it is on pin 3 (counting from 0) portD
 	while(!(PIND&(1<<3)));//wait for high
 	while((PIND&(1<<3)));//wait for low
@@ -117,7 +116,7 @@ int main(void){
 	TWBR=72;//set to 100khz
 	//enable serial
 	UBRR0H=0;
-	UBRR0L=1;//0 = 2M baud rate. 1 = 1M baud. 3 = 0.5M. 7 = 250k 207 is 9600 baud rate.
+	UBRR0L=2;//0 = 2M baud rate. 1 = 1M baud. 3 = 0.5M. 7 = 250k 207 is 9600 baud rate.
 	UCSR0A|=2;//double speed aysnc
 	UCSR0B = (1<<RXEN0)|(1<<TXEN0);//Enable receiver and transmitter
 	UCSR0C=6;//async 1 stop bit 8bit char no parity bits
@@ -134,6 +133,7 @@ int main(void){
 	setRes(QQVGA);
 	setColorSpace(YUV422);
 	wrReg(0x11,3);
+	StringPgm(PSTR("RDY"));
 #endif
 	/* If you are not sure what value to use here for the divider (register 0x11)
 	 * Values I have found to work raw vga 25 qqvga yuv422 12 qvga yuv422 21
