@@ -112,12 +112,12 @@ OPTLEVEL=2
 # one of the valid "-c PROGRAMMER-ID" values
 # described in the avrdude info page.
 #
-AVRDUDE_PROGRAMMERID=avrispv2
+AVRDUDE_PROGRAMMERID=arduino
 
 # port--serial or parallel port to which your
 # hardware programmer is attached
 #
-AVRDUDE_PORT=/dev/cu.usbserial-A50285BI
+AVRDUDE_PORT=/dev/cu.usbserial-14120
 
 
 ####################################################
@@ -166,7 +166,7 @@ CC=avr-gcc
 OBJCOPY=avr-objcopy
 OBJDUMP=avr-objdump
 SIZE=avr-size
-AVRDUDE=avrdude
+AVRDUDE=/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/avrdude
 REMOVE=rm -f
 
 ##### automatic target names ####
@@ -225,9 +225,9 @@ hex: $(HEXTRG)
 
 
 writeflash: hex
-	$(AVRDUDE) -c $(AVRDUDE_PROGRAMMERID)   \
-	 -p $(PROGRAMMER_MCU) -P $(AVRDUDE_PORT)        \
-	 -U flash:w:$(HEXROMTRG) -D
+	$(AVRDUDE) -c $(AVRDUDE_PROGRAMMERID) \
+	 -p $(PROGRAMMER_MCU) -P $(AVRDUDE_PORT) \
+	 -U flash:w:$(HEXROMTRG) -D -C/Applications/Arduino.app/Contents/Java/hardware/tools/avr/etc/avrdude.conf
 
 install: writeflash
 

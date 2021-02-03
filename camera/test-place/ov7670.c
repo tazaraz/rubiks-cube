@@ -41,7 +41,7 @@ static const struct regval_list qqvga_ov7670[] PROGMEM = {
 	{0xff, 0xff},	/* END MARKER */
 };
 static const struct regval_list yuv422_ov7670[] PROGMEM = {
-	{REG_COM7, 0x0},	/* Selects YUV mode */
+	{REG_COM7, 0x00},	/* Selects YUV mode */
 	{REG_RGB444, 0},	/* No RGB444 please */
 	{REG_COM1, 0},
 	{REG_COM15, COM15_R00FF},
@@ -52,7 +52,7 @@ static const struct regval_list yuv422_ov7670[] PROGMEM = {
 	{0x52, 0x22},		/* "matrix coefficient 4" */
 	{0x53, 0x5e},		/* "matrix coefficient 5" */
 	{0x54, 0x80},		/* "matrix coefficient 6" */
-	{REG_COM13,/*COM13_GAMMA|*/COM13_UVSAT},
+	{REG_COM13,/*COM13_GAMMA|*/0x88},
 	{0xff, 0xff},		/* END MARKER */
 };
 static const struct regval_list rgb565_ov7670[] PROGMEM = {
@@ -79,7 +79,7 @@ static const struct regval_list bayerRGB_ov7670[] PROGMEM = {
 };
 static const struct regval_list ov7670_default_regs[] PROGMEM = {//from the linux driver
 	{REG_COM7, COM7_RESET},
-	{REG_TSLB,  0x04},	/* OV */
+	{REG_TSLB,  0x14},	/* OV */
 	{REG_COM7, 0},	/* VGA */
 	/*
 	 * Set the hardware window.  These values from OV don't entirely

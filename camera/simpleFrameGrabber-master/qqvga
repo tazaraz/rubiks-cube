@@ -1,2 +1,2 @@
 #!/bin/sh
-./grab 160 120 yuv422 500000 /dev/tty.usbserial-A50285BI 0
+./grab 640 480 rgb565 2000000 /dev/cu.usbserial-14140 1

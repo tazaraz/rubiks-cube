@@ -6,7 +6,7 @@
 #include <avr/pgmspace.h>
 #include "ov7670.h"
 static const struct regval_list vga_ov7670[] PROGMEM = {
-	{REG_HREF,0xF6},	// was B6
+	{REG_HREF,0xF6},	// was B6  
 	{0x17,0x13},		// HSTART
 	{0x18,0x01},		// HSTOP
 	{0x19,0x02},		// VSTART
@@ -32,7 +32,7 @@ static const struct regval_list qqvga_ov7670[] PROGMEM = {
 	{0x73, 0xf2},		// divide by 4
 	{REG_HSTART,0x16},
 	{REG_HSTOP,0x04},
-	{REG_HREF,0xa4},
+	{REG_HREF,0xa4},		   
 	{REG_VSTART,0x02},
 	{REG_VSTOP,0x7a},
 	{REG_VREF,0x0a},
@@ -50,7 +50,7 @@ static const struct regval_list yuv422_ov7670[] PROGMEM = {
 	{0x52, 0x22},		/* "matrix coefficient 4" */
 	{0x53, 0x5e},		/* "matrix coefficient 5" */
 	{0x54, 0x80},		/* "matrix coefficient 6" */
-	{REG_COM13,/*COM13_GAMMA|*/COM13_GAMMA},
+	{REG_COM13,/*COM13_GAMMA|*/COM13_UVSAT},
 	{0xff, 0xff},		/* END MARKER */
 };
 static const struct regval_list rgb565_ov7670[] PROGMEM = {

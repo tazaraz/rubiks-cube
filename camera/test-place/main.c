@@ -40,7 +40,7 @@ void init_pins(){
     /* Serial Communication */
     // UBRR0L can be set manually if preferred.
     // 0 = 2M baud rate. 1 = 1M baud. 3 = 0.5M. 7 = 250k 207 is 9600 baud rate.
-    UBRR0L = UBRRL_VALUE;
+    UBRR0L = 0;//UBRRL_VALUE;
     UBRR0H = UBRRH_VALUE;
 
     UCSR0A |= (_BV(U2X0));                  // Double the baud rate
@@ -67,54 +67,57 @@ static void captureImg(uint16_t wg,uint16_t hg){
 	while((PINC&(1<<3)));//wait for low
     uint8_t buf[320];
 
-    // while(hg--){
-    //     send("R");
-	// 	lg2=wg;
-	// 	while(lg2--){
-	// 		while((PINC&(1<<2)));//wait for low
-	// 		UDR0=PINA&255;
-	// 		while(!(PINC&(1<<2)));//wait for high
-	// 	}
-	// }
-
-	while(hg--){
-		uint8_t*b=buf,*b2=buf;
-		lg2=wg/5;
+    while(hg--){
+		lg2=wg;
 		while(lg2--){
-			while((PINC&(1<<2)));//wait for low
-			*b++=PINA&255;
-			while(!(PINC&(1<<2)));//wait for high
-			while((PINC&(1<<2)));//wait for low
-			*b++=PINA&255;
-			while(!(PINC&(1<<2)));//wait for high
-			while((PINC&(1<<2)));//wait for low
-			*b++=PINA&255;
-			while(!(PINC&(1<<2)));//wait for high
-			while((PINC&(1<<2)));//wait for low
-			*b++=PINA&255;
-			while(!(PINC&(1<<2)));//wait for high
-			while((PINC&(1<<2)));//wait for low
-			*b++=PINA&255;
-			UDR0=*b2++;
-			while(!(PINC&(1<<2)));//wait for high
-		}
-		/* Finish sending the remainder during blanking */
-		lg2=320-(wg/5);
-		while(!( UCSR0A & (1<<UDRE0)));//wait for byte to transmit
-		while(lg2--){
-			UDR0=*b2++;
-			while(!( UCSR0A & (1<<UDRE0)));//wait for byte to transmit
+			while((PIND&(1<<2)));//wait for low
+			UDR0=(PINC&15)|(PIND&240);
+			while(!(PIND&(1<<2)));//wait for high
 		}
 	}
+
+	// while(hg--){
+	// 	uint8_t*b=buf,*b2=buf;
+	// 	lg2=wg/5;
+	// 	while(lg2--){
+	// 		while((PINC&(1<<2)));//wait for low
+	// 		*b++=PINA&255;
+	// 		while(!(PINC&(1<<2)));//wait for high
+	// 		while((PINC&(1<<2)));//wait for low
+	// 		*b++=PINA&255;
+	// 		while(!(PINC&(1<<2)));//wait for high
+	// 		while((PINC&(1<<2)));//wait for low
+	// 		*b++=PINA&255;
+	// 		while(!(PINC&(1<<2)));//wait for high
+	// 		while((PINC&(1<<2)));//wait for low
+	// 		*b++=PINA&255;
+	// 		while(!(PINC&(1<<2)));//wait for high
+	// 		while((PINC&(1<<2)));//wait for low
+	// 		*b++=PINA&255;
+	// 		UDR0=*b2++;
+	// 		while(!(PINC&(1<<2)));//wait for high
+	// 	}
+	// 	/* Finish sending the remainder during blanking */
+	// 	lg2=320-(wg/5);
+	// 	while(!( UCSR0A & (1<<UDRE0)));//wait for byte to transmit
+	// 	while(lg2--){
+	// 		UDR0=*b2++;
+	// 		while(!( UCSR0A & (1<<UDRE0)));//wait for byte to transmit
+	// 	}
+	// }
 }
 
 int main(void){
     init_pins();
     camInit();
 
-    setRes(QQVGA);
-	setColorSpace(YUV422);
-	wrReg(0x11,10);
+    // setRes(QQVGA);
+	// setColorSpace(YUV422);
+	// wrReg(0x11,10);
+
+	setRes(VGA);
+	setColorSpace(BAYER_RGB);
+	wrReg(0x11,25);
 
 	send("RDY");
     while (1){
@@ -127,7 +130,7 @@ int main(void){
         //     captureImg(160*2,120);
         //     // captureImg(640*2,480);
 		// }while(--x);//Uncomment this line to test divider settings
-        captureImg(160*2,120);
-        // captureImg(640,480);
+        // captureImg(160*2,120);
+        captureImg(640,480);
 	}
 }

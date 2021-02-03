@@ -162,9 +162,8 @@ void camInit(void);
 #define AWBC12		0x5e	/* AWB Control 12 */
 #define REG_GFI		0x69	/* Fix gain control */
 #define GGAIN		0x6a	/* G Channel AWB Gain */
-#define DBLV		0x6b	
+#define DBLV		0x6b
 #define AWBCTR3		0x6c	/* AWB Control 3 */
 #define AWBCTR2		0x6d	/* AWB Control 2 */
 #define AWBCTR1		0x6e	/* AWB Control 1 */
 #define AWBCTR0		0x6f	/* AWB Control 0 */
-

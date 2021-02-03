@@ -1,4 +1,5 @@
 #define F_CPU 16000000UL
+#define BAUD 1000000
 #define __AVR_ATmega2560__
 
 #include <stdint.h>
@@ -7,11 +8,12 @@
 #include <util/twi.h>
 #include <util/delay.h>
 #include <avr/pgmspace.h>
+#include <util/setbaud.h>
 #include "ov7670.h"
 /* Configuration: this lets you easily change between different resolutions
  * You must only uncomment one
  * no more no less*/
-//#define useVga
+// #define useVga
 //#define useQvga
 #define useQqvga
 
@@ -26,6 +28,7 @@ static void StringPgm(const char * str){
 	}while(pgm_read_byte_near(++str));
 }
 static void captureImg(uint16_t wg,uint16_t hg){
+	StringPgm(PSTR("FRM"));
 	uint16_t lg2;
 #ifdef useQvga
 	uint8_t buf[640];
@@ -37,6 +40,7 @@ static void captureImg(uint16_t wg,uint16_t hg){
 	while((PIND&(1<<3)));//wait for low
 #ifdef useVga
 	while(hg--){
+		StringPgm(PSTR("ROW"));
 		lg2=wg;
 		while(lg2--){
 			while((PIND&(1<<2)));//wait for low
@@ -47,6 +51,7 @@ static void captureImg(uint16_t wg,uint16_t hg){
 #elif defined(useQvga)
 	/*We send half of the line while reading then half later */
 	while(hg--){
+		StringPgm(PSTR("ROW"));
 		uint8_t*b=buf,*b2=buf;
 		lg2=wg/2;
 		while(lg2--){
@@ -68,7 +73,10 @@ static void captureImg(uint16_t wg,uint16_t hg){
 	}
 #else
 	/* This code is very similar to qvga sending code except we have even more blanking time to take advantage of */
+	// _delay_ms(2000);
 	while(hg--){
+		_delay_ms(50);
+		StringPgm(PSTR("ROW"));
 		uint8_t*b=buf,*b2=buf;
 		lg2=wg/5;
 		while(lg2--){
@@ -116,8 +124,10 @@ int main(void){
 	TWBR=72;//set to 100khz
 	//enable serial
 	UBRR0H=0;
-	UBRR0L=2;//0 = 2M baud rate. 1 = 1M baud. 3 = 0.5M. 7 = 250k 207 is 9600 baud rate.
-	UCSR0A|=2;//double speed aysnc
+	UBRR0L = UBRRL_VALUE;
+    UBRR0H = UBRRH_VALUE;
+	// UBRR0L=2;//0 = 2M baud rate. 1 = 1M baud. 3 = 0.5M. 7 = 250k 207 is 9600 baud rate.
+	// UCSR0A|=2;//double speed aysnc
 	UCSR0B = (1<<RXEN0)|(1<<TXEN0);//Enable receiver and transmitter
 	UCSR0C=6;//async 1 stop bit 8bit char no parity bits
 	camInit();
@@ -133,18 +143,18 @@ int main(void){
 	setRes(QQVGA);
 	setColorSpace(YUV422);
 	wrReg(0x11,3);
-	StringPgm(PSTR("RDY"));
 #endif
+	// StringPgm(PSTR("RDY"));
 	/* If you are not sure what value to use here for the divider (register 0x11)
 	 * Values I have found to work raw vga 25 qqvga yuv422 12 qvga yuv422 21
 	 * run the commented out test below and pick the smallest value that gets a correct image */
 	while (1){
 		/* captureImg operates in bytes not pixels in some cases pixels are two bytes per pixel
 		 * So for the width (if you were reading 640x480) you would put 1280 if you are reading yuv422 or rgb565 */
-		/*uint8_t x=63;//Uncomment this block to test divider settings note the other line you need to uncomment
-		  do{
-		  wrReg(0x11,x);
-		  _delay_ms(1000);*/
+		// uint8_t x=63;//Uncomment this block to test divider settings note the other line you need to uncomment
+		//   do{
+		//   wrReg(0x11,x);
+		// _delay_ms(1000);
 #ifdef useVga
 		captureImg(640,480);
 #elif defined(useQvga)
@@ -152,6 +162,6 @@ int main(void){
 #else
 		captureImg(160*2,120);
 #endif
-		//}while(--x);//Uncomment this line to test divider settings
+		// }while(--x && x < 63);//Uncomment this line to test divider settings
 	}
 }
